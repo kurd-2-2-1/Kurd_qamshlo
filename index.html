@@ -1,1 +1,2293 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>بوابة الطالب الكردي</title>
+
+<style>
+:root{
+    --bg:#0b132b;
+    --bg2:#101b38;
+    --card:#1c2541;
+    --card2:#243052;
+    --cyan:#48cae4;
+    --yellow:#ffb703;
+    --green:#2dd4bf;
+    --red:#fb7185;
+    --text:#fff;
+    --muted:#cbd5e1;
+    --border:#30436d;
+    --shadow:0 10px 35px rgba(0,0,0,.3);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,"Segoe UI",Tahoma,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+}
+
+button,input,select,textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+}
+
+/* HEADER */
+
+header{
+    background:
+    radial-gradient(circle at 20% 20%,rgba(72,202,228,.13),transparent 30%),
+    radial-gradient(circle at 80% 0%,rgba(255,183,3,.10),transparent 25%),
+    var(--bg2);
+    border-bottom:1px solid var(--border);
+    padding:25px;
+}
+
+.header-inner{
+    max-width:1400px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--cyan),#2563eb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    box-shadow:0 0 30px rgba(72,202,228,.25);
+}
+
+.logo h1{
+    color:var(--yellow);
+    font-size:28px;
+}
+
+.logo p{
+    color:var(--cyan);
+    font-size:14px;
+}
+
+.header-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+select,
+input,
+textarea{
+    background:#111d42;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:11px 14px;
+    outline:none;
+}
+
+select:focus,
+input:focus,
+textarea:focus{
+    border-color:var(--cyan);
+}
+
+.btn{
+    border:0;
+    padding:11px 16px;
+    border-radius:10px;
+    font-weight:bold;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    background:var(--cyan);
+    color:#07111f;
+}
+
+.btn-yellow{
+    background:var(--yellow);
+    color:#111;
+}
+
+.btn-dark{
+    background:#111d42;
+    color:white;
+    border:1px solid var(--border);
+}
+
+.btn-green{
+    background:var(--green);
+    color:#06201d;
+}
+
+/* NAV */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(17,29,66,.96);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+}
+
+.nav-inner{
+    max-width:1400px;
+    margin:auto;
+    padding:10px 20px;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+}
+
+.nav-inner button{
+    flex:none;
+    background:transparent;
+    color:white;
+    border:0;
+    padding:10px 14px;
+    border-radius:8px;
+}
+
+.nav-inner button:hover,
+.nav-inner button.active{
+    background:var(--cyan);
+    color:#07111f;
+}
+
+/* MAIN */
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+.hero{
+    background:
+    linear-gradient(135deg,rgba(72,202,228,.12),rgba(255,183,3,.06)),
+    var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:35px;
+    margin-bottom:30px;
+    box-shadow:var(--shadow);
+}
+
+.hero h2{
+    color:var(--yellow);
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:var(--muted);
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:25px;
+}
+
+.stat{
+    background:#111d42;
+    border:1px solid var(--border);
+    padding:20px;
+    border-radius:14px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    color:var(--cyan);
+    font-size:27px;
+}
+
+.section{
+    margin:45px 0;
+}
+
+.section-title{
+    color:var(--cyan);
+    font-size:25px;
+    margin-bottom:20px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+}
+
+/* SEARCH */
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.search-box input{
+    flex:1;
+    font-size:16px;
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    transition:.3s;
+    box-shadow:var(--shadow);
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    border-color:var(--cyan);
+    box-shadow:0 15px 45px rgba(72,202,228,.13);
+}
+
+.card-image{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    background:#111d42;
+}
+
+.card-body{
+    padding:20px;
+}
+
+.card h3{
+    color:var(--yellow);
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.card-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:18px;
+}
+
+/* DEPARTMENTS */
+
+.department{
+    padding:20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+.department h3{
+    color:var(--yellow);
+}
+
+.department small{
+    color:var(--cyan);
+}
+
+.subjects{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+}
+
+.subject{
+    background:#111d42;
+    border:1px solid var(--border);
+    padding:7px 11px;
+    border-radius:8px;
+    color:var(--muted);
+}
+
+/* TOOLS */
+
+.tools{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.tool{
+    background:var(--card);
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+}
+
+.tool h3{
+    color:var(--cyan);
+    margin-bottom:15px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.result{
+    margin-top:15px;
+    background:#111d42;
+    border-radius:10px;
+    padding:15px;
+    color:var(--yellow);
+    font-weight:bold;
+}
+
+/* DICTIONARY */
+
+.dictionary-search{
+    margin-bottom:15px;
+}
+
+.term{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    padding:14px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+}
+
+.term strong{
+    color:var(--cyan);
+}
+
+/* TABLE */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+    background:var(--card);
+}
+
+th,td{
+    padding:13px;
+    border:1px solid var(--border);
+    text-align:right;
+}
+
+th{
+    background:#111d42;
+    color:var(--yellow);
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    background:rgba(0,0,0,.85);
+    backdrop-filter:blur(7px);
+    padding:20px;
+    overflow:auto;
+}
+
+.modal.show{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-box{
+    width:min(900px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:var(--card);
+    border:1px solid var(--cyan);
+    border-radius:18px;
+    padding:25px;
+    position:relative;
+}
+
+.close{
+    position:absolute;
+    top:10px;
+    left:15px;
+    background:none;
+    border:0;
+    color:white;
+    font-size:30px;
+}
+
+.modal-box h2{
+    color:var(--yellow);
+    margin-bottom:15px;
+}
+
+.modal-box h3{
+    color:var(--cyan);
+    margin-top:20px;
+}
+
+.modal-box p{
+    color:var(--muted);
+    white-space:pre-line;
+}
+
+.modal-image{
+    width:100%;
+    max-height:300px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+/* FAVORITES */
+
+.favorite{
+    color:var(--yellow);
+    font-size:22px;
+    background:none;
+    border:0;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:60px;
+    background:#070d20;
+    border-top:1px solid var(--border);
+    padding:35px 20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+    .header-inner{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hero{
+        padding:22px;
+    }
+
+    .hero h2{
+        font-size:23px;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:500px){
+    .logo h1{
+        font-size:21px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .container{
+        padding:20px 12px;
+    }
+
+    .term{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+
+<div class="logo">
+<div class="logo-icon">🎓</div>
+<div>
+<h1 id="siteTitle">بوابة الطالب الكردي</h1>
+<p id="siteSubtitle">منصة تعليمية وأكاديمية وثقافية للطلاب</p>
+</div>
+</div>
+
+<div class="header-actions">
+
+<select id="language">
+<option value="ar">العربية</option>
+<option value="ku">Kurdî - Kurmancî</option>
+<option value="en">English</option>
+</select>
+
+<button class="btn btn-yellow" onclick="scrollToSection('favorites')">
+⭐ المفضلة
+</button>
+
+</div>
+
+</div>
+</header>
+
+<nav>
+<div class="nav-inner">
+
+<button onclick="scrollToSection('home')">🏠 الرئيسية</button>
+<button onclick="scrollToSection('departments')">🎓 التخصصات</button>
+<button onclick="scrollToSection('subjects')">📚 المواد</button>
+<button onclick="scrollToSection('dictionary')">📖 القاموس</button>
+<button onclick="scrollToSection('calculators')">🧮 الحاسبات</button>
+<button onclick="scrollToSection('resources')">🌐 المصادر</button>
+<button onclick="scrollToSection('schedule')">📅 الجدول</button>
+<button onclick="scrollToSection('notes')">📝 مذكراتي</button>
+<button onclick="scrollToSection('favorites')">⭐ المفضلة</button>
+
+</div>
+</nav>
+
+<main class="container">
+
+<!-- HOME -->
+
+<section id="home" class="hero">
+
+<h2>🎓 البوابة الأكاديمية للطالب الكردي</h2>
+
+<p>
+منصة تعليمية تجمع التخصصات الجامعية، المواد الدراسية،
+المعادلات، الحاسبات، المصطلحات، المراجع، الفيديوهات التعليمية،
+المذكرات، جدول المحاضرات والمصادر المفيدة في مكان واحد.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="departmentCount">0</strong>
+تخصصاً
+</div>
+
+<div class="stat">
+<strong>3</strong>
+لغات
+</div>
+
+<div class="stat">
+<strong>∞</strong>
+مصادر تعليمية
+</div>
+
+<div class="stat">
+<strong>100%</strong>
+متجاوب
+</div>
+
+</div>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="section">
+
+<h2 class="section-title">🔎 البحث الأكاديمي</h2>
+
+<div class="search-box">
+<input id="globalSearch"
+placeholder="ابحث عن تخصص، مادة، مصطلح، معادلة..."
+oninput="globalSearch()">
+</div>
+
+<div id="searchResults" class="grid"></div>
+
+</section>
+
+<!-- DEPARTMENTS -->
+
+<section id="departments" class="section">
+
+<h2 class="section-title">🎓 الكليات والأقسام الأكاديمية</h2>
+
+<div id="departmentsContainer"></div>
+
+</section>
+
+<!-- SUBJECTS -->
+
+<section id="subjects" class="section">
+
+<h2 class="section-title">📚 المواد الدراسية</h2>
+
+<div id="subjectsContainer" class="grid"></div>
+
+</section>
+
+<!-- DICTIONARY -->
+
+<section id="dictionary" class="section">
+
+<h2 class="section-title">📖 قاموس كردي / عربي / English</h2>
+
+<input
+class="dictionary-search"
+id="dictionarySearch"
+placeholder="ابحث عن مصطلح..."
+oninput="renderDictionary()"
+>
+
+<div id="dictionaryContainer"></div>
+
+</section>
+
+<!-- CALCULATORS -->
+
+<section id="calculators" class="section">
+
+<h2 class="section-title">🧮 الحاسبات والمعادلات الهندسية</h2>
+
+<div class="tools">
+
+<div class="tool">
+
+<h3>⚙️ قانون أوم</h3>
+
+<div class="form-row">
+<input id="voltage" type="number" placeholder="الجهد V">
+<input id="resistance" type="number" placeholder="المقاومة Ω">
+</div>
+
+<button class="btn btn-primary" onclick="ohm()">احسب التيار</button>
+
+<div id="ohmResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+<div class="tool">
+
+<h3>⚡ القدرة الكهربائية</h3>
+
+<div class="form-row">
+<input id="current" type="number" placeholder="التيار I">
+<input id="voltage2" type="number" placeholder="الجهد V">
+</div>
+
+<button class="btn btn-primary" onclick="powerCalc()">احسب القدرة</button>
+
+<div id="powerResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+<div class="tool">
+
+<h3>📐 مساحة الدائرة</h3>
+
+<input id="radius" type="number" placeholder="نصف القطر">
+
+<br><br>
+
+<button class="btn btn-primary" onclick="circleCalc()">احسب</button>
+
+<div id="circleResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+<div class="tool">
+
+<h3>🏗️ الضغط</h3>
+
+<div class="form-row">
+<input id="force" type="number" placeholder="القوة N">
+<input id="area" type="number" placeholder="المساحة m²">
+</div>
+
+<button class="btn btn-primary" onclick="pressureCalc()">احسب</button>
+
+<div id="pressureResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+<div class="tool">
+
+<h3>💧 كثافة المادة</h3>
+
+<div class="form-row">
+<input id="mass" type="number" placeholder="الكتلة kg">
+<input id="volume" type="number" placeholder="الحجم m³">
+</div>
+
+<button class="btn btn-primary" onclick="densityCalc()">احسب</button>
+
+<div id="densityResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+<div class="tool">
+
+<h3>📊 المتوسط الحسابي</h3>
+
+<input id="numbers" placeholder="مثال: 10,20,15,30">
+
+<br><br>
+
+<button class="btn btn-primary" onclick="averageCalc()">احسب</button>
+
+<div id="averageResult" class="result">النتيجة تظهر هنا</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- RESOURCES -->
+
+<section id="resources" class="section">
+
+<h2 class="section-title">🌐 مركز المصادر التعليمية</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<div class="card-body">
+
+<h3>▶️ YouTube</h3>
+
+<p>
+ابحث عن محاضرات وفيديوهات تعليمية حقيقية
+حسب التخصص أو المادة.
+</p>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick="youtubeSearch('هندسة البترول')">
+هندسة البترول
+</button>
+
+<button class="btn btn-primary"
+onclick="youtubeSearch('اللغة الكردية')">
+اللغة الكردية
+</button>
+
+</div>
+
+</div>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<h3>📄 Google PDF</h3>
+
+<p>
+البحث عن ملفات PDF ومذكرات ومراجع حقيقية
+عبر Google.
+</p>
+
+<button class="btn btn-yellow"
+onclick="googlePDF('هندسة البترول')">
+ابحث عن PDF
+</button>
+
+</div>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<h3>🔍 Google Scholar</h3>
+
+<p>
+البحث عن الأبحاث والدراسات الأكاديمية
+المتخصصة.
+</p>
+
+<button class="btn btn-green"
+onclick="scholarSearch('Kurdish history')">
+بحث أكاديمي
+</button>
+
+</div>
+</div>
+
+</div>
+
+</section>
+
+<!-- SCHEDULE -->
+
+<section id="schedule" class="section">
+
+<h2 class="section-title">📅 جدول المحاضرات</h2>
+
+<div class="tool">
+
+<div class="form-row">
+<input id="lectureDay" placeholder="اليوم">
+<input id="lectureTime" placeholder="الوقت">
+</div>
+
+<div class="form-row">
+<input id="lectureSubject" placeholder="المادة">
+<input id="lectureTeacher" placeholder="الأستاذ">
+</div>
+
+<button class="btn btn-primary" onclick="addLecture()">
+➕ إضافة محاضرة
+</button>
+
+<br><br>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+<tr>
+<th>اليوم</th>
+<th>الوقت</th>
+<th>المادة</th>
+<th>الأستاذ</th>
+<th>حذف</th>
+</tr>
+</thead>
+
+<tbody id="scheduleBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- NOTES -->
+
+<section id="notes" class="section">
+
+<h2 class="section-title">📝 مذكراتي</h2>
+
+<div class="tool">
+
+<textarea
+id="notesText"
+rows="10"
+placeholder="اكتب ملاحظاتك الدراسية هنا..."
+></textarea>
+
+<br><br>
+
+<button class="btn btn-primary" onclick="saveNotes()">
+💾 حفظ الملاحظات
+</button>
+
+<button class="btn btn-dark" onclick="clearNotes()">
+🗑️ حذف
+</button>
+
+</div>
+
+</section>
+
+<!-- FAVORITES -->
+
+<section id="favorites" class="section">
+
+<h2 class="section-title">⭐ تخصصاتي المفضلة</h2>
+
+<div id="favoritesContainer" class="grid"></div>
+
+</section>
+
+</main>
+
+<footer>
+
+<p>🎓 بوابة الطالب الكردي</p>
+
+<p>
+منصة تعليمية مستقلة تهدف إلى جمع الموارد الأكاديمية
+والثقافية في مكان واحد.
+</p>
+
+<p>
+© 2026 جميع الحقوق محفوظة
+</p>
+
+</footer>
+
+
+<!-- MODAL -->
+
+<div id="modal" class="modal">
+
+<div class="modal-box">
+
+<button class="close" onclick="closeModal()">×</button>
+
+<img id="modalImage" class="modal-image">
+
+<h2 id="modalTitle"></h2>
+
+<div id="modalContent"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const departments = [
+
+{
+college:"كلية الهندسة والبترول",
+icon:"⚙️",
+items:[
+{
+name:"هندسة البترول والبتروكيمياء",
+location:"رميلان",
+subjects:[
+"جيولوجيا النفط",
+"هندسة الحفر",
+"هندسة المكامن",
+"إنتاج النفط",
+"بتروكيمياء",
+"سلامة صناعية"
+],
+info:"يدرس الطالب كيفية استكشاف النفط والغاز وحفر الآبار وإنتاج النفط وتحليل المكامن والعمليات البتروكيميائية.",
+image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1000"
+},
+{
+name:"الهندسة الزراعية",
+subjects:[
+"علوم التربة",
+"الري",
+"الميكنة الزراعية",
+"الهندسة المائية"
+],
+info:"تجمع بين الهندسة والزراعة لتطوير أنظمة الري والإنتاج الزراعي والآلات الزراعية.",
+image:"https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1000"
+},
+{
+name:"الهندسة البيئية",
+subjects:[
+"تلوث المياه",
+"تلوث الهواء",
+"إدارة النفايات",
+"الاستدامة"
+],
+info:"تهتم بحماية البيئة ومعالجة المياه والنفايات وتقليل التلوث.",
+image:"https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1000"
+},
+{
+name:"الهندسة الحاسوبية",
+subjects:[
+"البرمجة",
+"الخوارزميات",
+"قواعد البيانات",
+"الشبكات",
+"الذكاء الاصطناعي"
+],
+info:"مجال يجمع هندسة الحاسوب والبرمجة والأنظمة والشبكات والتقنيات الحديثة.",
+image:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000"
+}
+]
+},
+
+{
+college:"كلية الآداب والعلوم الإنسانية",
+icon:"📚",
+items:[
+{
+name:"اللغة والأدب الكردي",
+subjects:[
+"قواعد الكرمانجية",
+"الأدب الكردي",
+"النقد الأدبي",
+"الأدب الكلاسيكي",
+"الأدب الحديث"
+],
+info:"يدرس اللغة الكردية وآدابها وتاريخها والنصوص الشعرية والنثرية والتراث الأدبي.",
+image:"https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1000"
+},
+{
+name:"اللغة والأدب العربي",
+subjects:[
+"النحو",
+"الصرف",
+"البلاغة",
+"الأدب العربي",
+"النقد"
+],
+info:"دراسة اللغة العربية وآدابها وعلومها المختلفة.",
+image:"https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=1000"
+},
+{
+name:"الأدب الإنجليزي",
+subjects:[
+"English Literature",
+"Grammar",
+"Linguistics",
+"Academic Writing"
+],
+info:"دراسة الأدب واللغة الإنجليزية والكتابة الأكاديمية واللسانيات.",
+image:"https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=1000"
+},
+{
+name:"الترجمة",
+subjects:[
+"ترجمة عربية",
+"ترجمة كردية",
+"ترجمة إنجليزية",
+"الترجمة الفورية",
+"الترجمة التحريرية",
+"مصطلحات"
+],
+info:"يؤهل الطالب للعمل في الترجمة التحريرية والفورية ويطور مهارات البحث عن المصطلحات والمراجع.",
+image:"https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1000"
+},
+{
+name:"الجغرافيا",
+subjects:[
+"الجغرافيا الطبيعية",
+"الجغرافيا البشرية",
+"GIS",
+"الخرائط",
+"المناخ"
+],
+info:"دراسة الأرض والمجتمعات والخرائط والبيئة ونظم المعلومات الجغرافية.",
+image:"https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1000"
+}
+]
+},
+
+{
+college:"كلية العلوم الاجتماعية وعلم المرأة",
+icon:"⚖️",
+items:[
+{
+name:"علم الاجتماع",
+subjects:[
+"علم الاجتماع",
+"المنهجية",
+"المجتمع",
+"علم النفس الاجتماعي"
+],
+info:"تحليل المجتمع والعلاقات الاجتماعية والمؤسسات والتغيرات الاجتماعية.",
+image:"https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1000"
+},
+{
+name:"علم المرأة Jineolojî",
+subjects:[
+"دراسات المرأة",
+"تاريخ المرأة",
+"علم الاجتماع",
+"الفكر الاجتماعي"
+],
+info:"مجال بحثي يركز على دراسة دور المرأة والمجتمع والتاريخ من منظور نقدي واجتماعي.",
+image:"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1000"
+},
+{
+name:"العلوم السياسية",
+subjects:[
+"النظم السياسية",
+"العلاقات الدولية",
+"القانون الدولي",
+"الاقتصاد السياسي"
+],
+info:"دراسة الأنظمة السياسية والعلاقات الدولية والمؤسسات والحركات السياسية.",
+image:"https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1000"
+},
+{
+name:"التاريخ",
+subjects:[
+"التاريخ القديم",
+"التاريخ الوسيط",
+"التاريخ الحديث",
+"التاريخ الكردي",
+"منهجية البحث"
+],
+info:"دراسة الأحداث والمجتمعات والمصادر التاريخية وتحليلها بطريقة أكاديمية.",
+image:"https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=1000"
+}
+]
+},
+
+{
+college:"كلية العلوم الطبيعية",
+icon:"🔬",
+items:[
+{
+name:"الكيمياء",
+subjects:[
+"الكيمياء العضوية",
+"الكيمياء غير العضوية",
+"الكيمياء التحليلية",
+"الكيمياء الفيزيائية"
+],
+info:"دراسة المادة والتفاعلات الكيميائية والتحليل المخبري.",
+image:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1000"
+},
+{
+name:"الفيزياء",
+subjects:[
+"الميكانيك",
+"الكهرباء",
+"المغناطيسية",
+"الفيزياء الحديثة"
+],
+info:"دراسة قوانين الطبيعة والطاقة والحركة والكهرباء والمادة.",
+image:"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1000"
+},
+{
+name:"الأحياء",
+subjects:[
+"علم الخلية",
+"الوراثة",
+"الأحياء الدقيقة",
+"علم النبات",
+"علم الحيوان"
+],
+info:"دراسة الكائنات الحية والخلايا والجينات والأنظمة البيولوجية.",
+image:"https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=1000"
+},
+{
+name:"الرياضيات",
+subjects:[
+"التفاضل",
+"التكامل",
+"الجبر",
+"الإحصاء",
+"التحليل"
+],
+info:"أساس العديد من العلوم والهندسات والاقتصاد وعلوم الحاسوب.",
+image:"https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1000"
+}
+]
+},
+
+{
+college:"كلية التربية والعلوم التربوية",
+icon:"👨‍🏫",
+items:[
+{
+name:"معلم صف",
+subjects:[
+"علم النفس التربوي",
+"طرق التدريس",
+"إدارة الصف",
+"التقييم"
+],
+info:"إعداد المدرسين للعمل في التعليم الأساسي.",
+image:"https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1000"
+},
+{
+name:"التربية البدنية",
+subjects:[
+"علم الحركة",
+"التدريب الرياضي",
+"الصحة",
+"اللياقة"
+],
+info:"إعداد كوادر متخصصة في التربية الرياضية والتدريب.",
+image:"https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1000"
+},
+{
+name:"العلوم التربوية",
+subjects:[
+"علم النفس",
+"المناهج",
+"التقييم",
+"الإدارة التعليمية"
+],
+info:"دراسة أساليب التعليم والتعلم والمناهج والإدارة التربوية.",
+image:"https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1000"
+}
+]
+},
+
+{
+college:"كلية الحقوق والشريعة",
+icon:"⚖️",
+items:[
+{
+name:"الحقوق والقانون",
+subjects:[
+"القانون المدني",
+"القانون الجنائي",
+"القانون الدولي",
+"الدستور"
+],
+info:"دراسة الأنظمة القانونية والمبادئ الحقوقية والقوانين.",
+image:"https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1000"
+},
+{
+name:"العلوم الدينية والشرائع المقارنة",
+subjects:[
+"الأديان",
+"الشرائع",
+"الفكر الديني",
+"المقارنة"
+],
+info:"دراسة الأديان والشرائع والفكر الديني ومقارنتها بصورة أكاديمية.",
+image:"https://images.unsplash.com/photo-1604881991720-f91add269bed?w=1000"
+}
+]
+},
+
+{
+college:"كلية الفنون والجماليات",
+icon:"🎨",
+items:[
+{
+name:"الفنون الجميلة",
+subjects:[
+"الرسم",
+"النحت",
+"التصميم",
+"تاريخ الفن"
+],
+info:"تطوير المهارات الفنية والإبداعية في الرسم والنحت والتصميم.",
+image:"https://images.unsplash.com/photo-1549490349-8643362247b5?w=1000"
+},
+{
+name:"الموسيقى والمقامات",
+subjects:[
+"النظريات الموسيقية",
+"المقامات",
+"الغناء",
+"الآلات"
+],
+info:"دراسة الموسيقى والمقامات والتأليف والأداء.",
+image:"https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1000"
+}
+]
+},
+
+{
+college:"المعاهد العالية والمهنية",
+icon:"🏛️",
+items:[
+{
+name:"المعهد العالي للإعلام",
+subjects:[
+"الصحافة",
+"الإعداد التلفزيوني",
+"الإعلام الرقمي"
+],
+info:"تأهيل الطلاب للعمل في الصحافة والإعلام الرقمي والإنتاج الإعلامي.",
+image:"https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000"
+},
+{
+name:"المعهد العالي للإدارة والمالية",
+subjects:[
+"المحاسبة",
+"الإدارة",
+"المالية",
+"إدارة الأعمال"
+],
+info:"تطوير مهارات الإدارة والمحاسبة والمالية.",
+image:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1000"
+},
+{
+name:"المعهد الطبي",
+subjects:[
+"التمريض",
+"التحاليل الطبية",
+"الصيدلة"
+],
+info:"التخصصات الطبية والمخبرية والتمريضية.",
+image:"https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1000"
+},
+{
+name:"المعهد التقني والهندسي",
+subjects:[
+"الميكانيك",
+"الكهرباء",
+"الهندسة المدنية"
+],
+info:"التخصصات التقنية والهندسية التطبيقية.",
+image:"https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1000"
+}
+]
+}
+
+];
+
+
+/* =========================================================
+   DICTIONARY
+========================================================= */
+
+const dictionary=[
+
+["Dengbêj","دنگبێژ / مغني شعبي","Dengbêj"],
+["Rojava","روجآفا / غرب كردستان","Rojava"],
+["Kurdistan","كردستان","Kurdistan"],
+["Jineolojî","علم المرأة","Women's Science"],
+["Civaknasî","علم الاجتماع","Sociology"],
+["Erdnîgarî","الجغرافيا","Geography"],
+["Dîrok","التاريخ","History"],
+["Wêje","الأدب","Literature"],
+["Werger","الترجمة","Translation"],
+["Ziman","اللغة","Language"],
+["Rêziman","القواعد","Grammar"],
+["Peyman","معاهدة","Treaty"],
+["Dewlet","دولة","State"],
+["Azadî","الحرية","Freedom"],
+["Zanist","العلم","Science"],
+["Perwerde","التربية","Education"],
+["Endezyarî","الهندسة","Engineering"],
+["Petrol","النفط","Petroleum"],
+["Av","الماء","Water"],
+["Zevî","الأرض / التربة","Soil"],
+["Kîmyayê","الكيمياء","Chemistry"],
+["Fîzîk","الفيزياء","Physics"],
+["Biyolojî","الأحياء","Biology"],
+["Matematîk","الرياضيات","Mathematics"],
+["Dane","بيانات","Data"],
+["Nivîs","نص / كتابة","Text / Writing"]
+
+];
+
+
+/* =========================================================
+   RENDER DEPARTMENTS
+========================================================= */
+
+function renderDepartments(){
+
+const container=document.getElementById("departmentsContainer");
+
+container.innerHTML="";
+
+let total=0;
+
+departments.forEach(college=>{
+
+const wrapper=document.createElement("div");
+
+wrapper.className="department";
+
+wrapper.innerHTML=`
+<h3>${college.icon} ${college.college}</h3>
+<br>
+`;
+
+college.items.forEach(item=>{
+
+total++;
+
+const div=document.createElement("div");
+
+div.className="department";
+
+div.innerHTML=`
+
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+
+<div>
+
+<h3>${item.name}</h3>
+
+<small>${college.college}</small>
+
+</div>
+
+<button class="favorite"
+onclick='toggleFavorite(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+⭐
+</button>
+
+</div>
+
+<p style="margin-top:10px;color:#cbd5e1">
+${item.info}
+</p>
+
+<div class="subjects">
+
+${item.subjects.map(s=>`<span class="subject">${s}</span>`).join("")}
+
+</div>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick='openDepartment(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+📚 فتح التخصص
+</button>
+
+<button class="btn btn-dark"
+onclick="youtubeSearch('${item.name}')">
+▶️ فيديوهات
+</button>
+
+<button class="btn btn-yellow"
+onclick="googlePDF('${item.name}')">
+📄 PDF
+</button>
+
+</div>
+`;
+
+wrapper.appendChild(div);
+
+});
+
+container.appendChild(wrapper);
+
+});
+
+document.getElementById("departmentCount").innerText=total;
+
+}
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+function renderSubjects(){
+
+const container=document.getElementById("subjectsContainer");
+
+container.innerHTML="";
+
+departments.forEach(college=>{
+
+college.items.forEach(item=>{
+
+item.subjects.forEach(subject=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<div class="card-body">
+
+<h3>${subject}</h3>
+
+<p>
+${item.name}
+</p>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick="youtubeSearch('${subject} ${item.name}')">
+▶️ YouTube
+</button>
+
+<button class="btn btn-yellow"
+onclick="googlePDF('${subject} ${item.name}')">
+📄 PDF
+</button>
+
+<button class="btn btn-dark"
+onclick="googleSearch('${subject} ${item.name}')">
+🔎 Google
+</button>
+
+</div>
+
+</div>
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+});
+
+}
+
+
+/* =========================================================
+   DEPARTMENT MODAL
+========================================================= */
+
+function openDepartment(item){
+
+document.getElementById("modalTitle").innerText=item.name;
+
+document.getElementById("modalImage").src=item.image;
+
+document.getElementById("modalContent").innerHTML=`
+
+<h3>🎓 نبذة عن التخصص</h3>
+
+<p>${item.info}</p>
+
+<h3>📚 المواد الأساسية</h3>
+
+<p>
+${item.subjects.join(" • ")}
+</p>
+
+<h3>▶️ البحث عن المحاضرات</h3>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick="youtubeSearch('${item.name}')">
+YouTube
+</button>
+
+<button class="btn btn-yellow"
+onclick="googlePDF('${item.name}')">
+Google PDF
+</button>
+
+<button class="btn btn-green"
+onclick="scholarSearch('${item.name}')">
+Google Scholar
+</button>
+
+</div>
+
+<h3>🎯 ماذا يمكن أن يفيد الطالب؟</h3>
+
+<p>
+يمكن استخدام هذه الصفحة للوصول إلى المحاضرات والمراجع
+والأبحاث والكتب والمصادر التعليمية المتاحة على الإنترنت.
+يمكن للطالب أيضاً حفظ التخصص في المفضلة وتنظيم مواده
+وجدول محاضراته وملاحظاته.
+</p>
+
+`;
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function closeModal(){
+
+document.getElementById("modal").classList.remove("show");
+
+}
+
+window.onclick=function(e){
+
+if(e.target===document.getElementById("modal")){
+closeModal();
+}
+
+};
+
+
+/* =========================================================
+   SEARCH LINKS
+========================================================= */
+
+function youtubeSearch(query){
+
+const url=
+"https://www.youtube.com/results?search_query="+
+encodeURIComponent(query+" شرح محاضرات");
+
+window.open(url,"_blank");
+
+}
+
+function googlePDF(query){
+
+const url=
+"https://www.google.com/search?q="+
+encodeURIComponent(query+" filetype:pdf");
+
+window.open(url,"_blank");
+
+}
+
+function googleSearch(query){
+
+const url=
+"https://www.google.com/search?q="+
+encodeURIComponent(query);
+
+window.open(url,"_blank");
+
+}
+
+function scholarSearch(query){
+
+const url=
+"https://scholar.google.com/scholar?q="+
+encodeURIComponent(query);
+
+window.open(url,"_blank");
+
+}
+
+
+/* =========================================================
+   DICTIONARY
+========================================================= */
+
+function renderDictionary(){
+
+const query=
+document.getElementById("dictionarySearch").value
+.toLowerCase()
+.trim();
+
+const container=
+document.getElementById("dictionaryContainer");
+
+container.innerHTML="";
+
+dictionary
+.filter(x=>x.join(" ").toLowerCase().includes(query))
+.forEach(x=>{
+
+const div=document.createElement("div");
+
+div.className="term";
+
+div.innerHTML=`
+
+<strong>${x[0]}</strong>
+
+<span>${x[1]}</span>
+
+<span>${x[2]}</span>
+
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+
+/* =========================================================
+   CALCULATORS
+========================================================= */
+
+function ohm(){
+
+const V=parseFloat(document.getElementById("voltage").value);
+const R=parseFloat(document.getElementById("resistance").value);
+
+if(!isFinite(V)||!isFinite(R)||R===0){
+alert("أدخل قيم صحيحة");
+return;
+}
+
+document.getElementById("ohmResult").innerText=
+"I = V / R = "+(V/R).toFixed(4)+" A";
+
+}
+
+function powerCalc(){
+
+const I=parseFloat(document.getElementById("current").value);
+const V=parseFloat(document.getElementById("voltage2").value);
+
+if(!isFinite(I)||!isFinite(V)){
+alert("أدخل قيم صحيحة");
+return;
+}
+
+document.getElementById("powerResult").innerText=
+"P = V × I = "+(V*I).toFixed(4)+" W";
+
+}
+
+function circleCalc(){
+
+const r=parseFloat(document.getElementById("radius").value);
+
+if(!isFinite(r)){
+alert("أدخل نصف القطر");
+return;
+}
+
+document.getElementById("circleResult").innerText=
+"A = πr² = "+(Math.PI*r*r).toFixed(4)+" m²";
+
+}
+
+function pressureCalc(){
+
+const F=parseFloat(document.getElementById("force").value);
+const A=parseFloat(document.getElementById("area").value);
+
+if(!isFinite(F)||!isFinite(A)||A===0){
+alert("أدخل قيم صحيحة");
+return;
+}
+
+document.getElementById("pressureResult").innerText=
+"P = F/A = "+(F/A).toFixed(4)+" Pa";
+
+}
+
+function densityCalc(){
+
+const m=parseFloat(document.getElementById("mass").value);
+const v=parseFloat(document.getElementById("volume").value);
+
+if(!isFinite(m)||!isFinite(v)||v===0){
+alert("أدخل قيم صحيحة");
+return;
+}
+
+document.getElementById("densityResult").innerText=
+"ρ = m/V = "+(m/v).toFixed(4)+" kg/m³";
+
+}
+
+function averageCalc(){
+
+const nums=
+document.getElementById("numbers")
+.value
+.split(",")
+.map(Number)
+.filter(Number.isFinite);
+
+if(!nums.length){
+alert("أدخل أرقاماً");
+return;
+}
+
+const avg=
+nums.reduce((a,b)=>a+b,0)/nums.length;
+
+document.getElementById("averageResult").innerText=
+"المتوسط = "+avg.toFixed(4);
+
+}
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+function getFavorites(){
+
+return JSON.parse(
+localStorage.getItem("kurdishStudentFavorites")||"[]"
+);
+
+}
+
+function toggleFavorite(item){
+
+let favorites=getFavorites();
+
+const exists=favorites.some(x=>x.name===item.name);
+
+if(exists){
+
+favorites=favorites.filter(x=>x.name!==item.name);
+
+}else{
+
+favorites.push(item);
+
+}
+
+localStorage.setItem(
+"kurdishStudentFavorites",
+JSON.stringify(favorites)
+);
+
+renderFavorites();
+
+}
+
+function renderFavorites(){
+
+const container=
+document.getElementById("favoritesContainer");
+
+const favorites=getFavorites();
+
+container.innerHTML="";
+
+if(!favorites.length){
+
+container.innerHTML=`
+<div class="card">
+<div class="card-body">
+<h3>⭐ لا توجد تخصصات مفضلة</h3>
+<p>اضغط ⭐ بجانب أي تخصص لإضافته هنا.</p>
+</div>
+</div>
+`;
+
+return;
+
+}
+
+favorites.forEach(item=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<img class="card-image" src="${item.image}">
+
+<div class="card-body">
+
+<h3>${item.name}</h3>
+
+<p>${item.info}</p>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick='openDepartment(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+فتح
+</button>
+
+<button class="btn btn-dark"
+onclick="toggleFavorite(${JSON.stringify(item).replace(/'/g,"&#39;")})">
+إزالة
+</button>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+function saveNotes(){
+
+const text=
+document.getElementById("notesText").value;
+
+localStorage.setItem("kurdishStudentNotes",text);
+
+alert("تم حفظ الملاحظات على جهازك.");
+
+}
+
+function clearNotes(){
+
+if(confirm("هل تريد حذف الملاحظات؟")){
+
+localStorage.removeItem("kurdishStudentNotes");
+
+document.getElementById("notesText").value="";
+
+}
+
+}
+
+
+/* =========================================================
+   SCHEDULE
+========================================================= */
+
+function getSchedule(){
+
+return JSON.parse(
+localStorage.getItem("kurdishStudentSchedule")||"[]"
+);
+
+}
+
+function addLecture(){
+
+const day=
+document.getElementById("lectureDay").value;
+
+const time=
+document.getElementById("lectureTime").value;
+
+const subject=
+document.getElementById("lectureSubject").value;
+
+const teacher=
+document.getElementById("lectureTeacher").value;
+
+if(!day||!time||!subject){
+
+alert("أدخل اليوم والوقت والمادة");
+
+return;
+
+}
+
+const schedule=getSchedule();
+
+schedule.push({
+day,
+time,
+subject,
+teacher
+});
+
+localStorage.setItem(
+"kurdishStudentSchedule",
+JSON.stringify(schedule)
+);
+
+document.getElementById("lectureDay").value="";
+document.getElementById("lectureTime").value="";
+document.getElementById("lectureSubject").value="";
+document.getElementById("lectureTeacher").value="";
+
+renderSchedule();
+
+}
+
+function deleteLecture(index){
+
+const schedule=getSchedule();
+
+schedule.splice(index,1);
+
+localStorage.setItem(
+"kurdishStudentSchedule",
+JSON.stringify(schedule)
+);
+
+renderSchedule();
+
+}
+
+function renderSchedule(){
+
+const body=
+document.getElementById("scheduleBody");
+
+body.innerHTML="";
+
+getSchedule().forEach((x,i)=>{
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
+
+<td>${x.day}</td>
+<td>${x.time}</td>
+<td>${x.subject}</td>
+<td>${x.teacher||"-"}</td>
+
+<td>
+
+<button class="btn btn-dark"
+onclick="deleteLecture(${i})">
+🗑️
+</button>
+
+</td>
+
+`;
+
+body.appendChild(tr);
+
+});
+
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+function globalSearch(){
+
+const q=
+document.getElementById("globalSearch")
+.value
+.toLowerCase()
+.trim();
+
+const container=
+document.getElementById("searchResults");
+
+container.innerHTML="";
+
+if(!q)return;
+
+let results=[];
+
+departments.forEach(college=>{
+
+college.items.forEach(item=>{
+
+const text=
+college.college+" "+
+item.name+" "+
+item.info+" "+
+item.subjects.join(" ");
+
+if(text.toLowerCase().includes(q)){
+
+results.push({
+...item,
+college:college.college
+});
+
+}
+
+});
+
+});
+
+results.slice(0,30).forEach(item=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<img class="card-image" src="${item.image}">
+
+<div class="card-body">
+
+<h3>${item.name}</h3>
+
+<p>${item.college}</p>
+
+<p>${item.info}</p>
+
+<div class="card-actions">
+
+<button class="btn btn-primary"
+onclick='openDepartment(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+فتح
+</button>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+if(!results.length){
+
+container.innerHTML=`
+
+<div class="card">
+
+<div class="card-body">
+
+<h3>لم يتم العثور على نتائج</h3>
+
+<p>جرب كلمة أخرى.</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+const translations={
+
+ar:{
+title:"بوابة الطالب الكردي",
+subtitle:"منصة تعليمية وأكاديمية وثقافية للطلاب",
+home:"الرئيسية",
+departments:"التخصصات",
+subjects:"المواد",
+dictionary:"القاموس",
+calculators:"الحاسبات",
+resources:"المصادر",
+schedule:"الجدول",
+notes:"مذكراتي",
+favorites:"المفضلة"
+},
+
+ku:{
+title:"Portala Xwendekarê Kurd",
+subtitle:"Platforma akademîk, perwerdehî û çandî",
+home:"Destpêk",
+departments:"Beşên Zanîngehê",
+subjects:"Ders",
+dictionary:"Ferheng",
+calculators:"Hesabker",
+resources:"Çavkaniyên",
+schedule:"Bername",
+notes:"Notên min",
+favorites:"Bijare"
+},
+
+en:{
+title:"Kurdish Student Portal",
+subtitle:"Academic, educational and cultural platform",
+home:"Home",
+departments:"Departments",
+subjects:"Subjects",
+dictionary:"Dictionary",
+calculators:"Calculators",
+resources:"Resources",
+schedule:"Schedule",
+notes:"My Notes",
+favorites:"Favorites"
+}
+
+};
+
+document
+.getElementById("language")
+.addEventListener("change",function(){
+
+const lang=this.value;
+
+const t=translations[lang];
+
+document.getElementById("siteTitle").innerText=t.title;
+
+document.getElementById("siteSubtitle").innerText=t.subtitle;
+
+document.documentElement.lang=lang;
+
+document.documentElement.dir=
+lang==="ar"?"rtl":"ltr";
+
+});
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function scrollToSection(id){
+
+document
+.getElementById(id)
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+renderDepartments();
+
+renderSubjects();
+
+renderDictionary();
+
+renderFavorites();
+
+renderSchedule();
+
+const savedNotes=
+localStorage.getItem("kurdishStudentNotes");
+
+if(savedNotes){
+
+document.getElementById("notesText").value=savedNotes;
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
