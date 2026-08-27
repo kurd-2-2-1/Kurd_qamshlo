@@ -158,4 +158,968 @@ document.getElementById("wordSearch").oninput=renderWords;
 renderNames();renderWords();
 </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الكليات والأقسام الأكاديمية ومعرض الصور</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --accent-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* القائمة الجانبية للأقسام */
+        sidebar {
+            width: 320px;
+            background-color: var(--card-bg);
+            border-left: 1px solid #e2e8f0;
+            overflow-y: auto;
+            padding: 20px 10px;
+        }
+
+        .college-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 10px 8px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .department-item {
+            padding: 10px 15px;
+            margin: 4px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .department-item:hover, .department-item.active {
+            background-color: #eff6ff;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* المحتوى الرئيسي والمعرض */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            id: main-content;
+        }
+
+        .header-info {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .img-card {
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 220px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .img-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            color: var(--accent-color);
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- القائمة الجانبية -->
+    <sidebar id="sidebar-menu"></sidebar>
+
+    <!-- منطقة عرض الصور والمحتوى -->
+    <main id="main-scroll">
+        <div class="header-info">
+            <h1 id="selected-title">اختر قسماً من القائمة</h1>
+            <p id="selected-desc">اختر أي قسم لعرض المعرض الخاص به وسحب ملايين الصور المتجددة بشكل لا نهائي.</p>
+        </div>
+
+        <div class="gallery-grid" id="gallery"></div>
+        <div class="loading-spinner" id="loader" style="display: none;">جاري تحميل المزيد من الصور...</div>
+    </main>
+
+    <script>
+        // هيكلة كافة الكليات والأقسام بالكامل
+        const academicData = [
+            {
+                college: "كلية الهندسة والبترول",
+                departments: [
+                    { name: "قسم هندسة البترول والبتروكيمياء (رميلان)", keyword: "petroleum engineering" },
+                    { name: "قسم الهندسة الزراعية", keyword: "agricultural engineering" },
+                    { name: "قسم الهندسة البيئية", keyword: "environmental engineering" },
+                    { name: "قسم الهندسة الحاسوبية", keyword: "computer engineering" }
+                ]
+            },
+            {
+                college: "كلية الآداب والعلوم الإنسانية",
+                departments: [
+                    { name: "قسم اللغة والأدب الكردي", keyword: "kurdish literature" },
+                    { name: "قسم اللغة والأدب العربي", keyword: "arabic literature" },
+                    { name: "قسم الأدب الإنجليزي", keyword: "english literature" },
+                    { name: "قسم الترجمة", keyword: "translation" },
+                    { name: "قسم الجغرافيا", keyword: "geography" }
+                ]
+            },
+            {
+                college: "كلية العلوم الاجتماعية وعلم المرأة",
+                departments: [
+                    { name: "قسم علم الاجتماع (Civaknasi)", keyword: "sociology" },
+                    { name: "قسم علم المرأة (Jineolojî)", keyword: "women sciences" },
+                    { name: "قسم العلوم السياسية", keyword: "political science" },
+                    { name: "قسم التاريخ", keyword: "history" }
+                ]
+            },
+            {
+                college: "كلية العلوم الطبيعية",
+                departments: [
+                    { name: "قسم الكيمياء", keyword: "chemistry lab" },
+                    { name: "قسم الفيزياء", keyword: "physics" },
+                    { name: "قسم الأحياء", keyword: "biology" },
+                    { name: "قسم الرياضيات", keyword: "mathematics" }
+                ]
+            },
+            {
+                college: "كلية التربية والعلوم التربوية",
+                departments: [
+                    { name: "قسم معلم صف", keyword: "classroom teacher" },
+                    { name: "قسم المعلم المؤمن (التربية البدنية)", keyword: "sports education" },
+                    { name: "قسم العلوم التربوية", keyword: "pedagogy" }
+                ]
+            },
+            {
+                college: "كلية الحقوق والشريعة",
+                departments: [
+                    { name: "قسم الحقوق والقانون", keyword: "law justice" },
+                    { name: "قسم العلوم الدينية والشرائع المقارنة", keyword: "theology religion" }
+                ]
+            },
+            {
+                college: "كلية الفنون والجماليات",
+                departments: [
+                    { name: "قسم الفنون الجميلة (رسم، نحت، تصميم)", keyword: "fine arts painting" },
+                    { name: "قسم الموسيقى والمقامات", keyword: "music orchestra" }
+                ]
+            },
+            {
+                college: "الماهعد العالية والمهنية",
+                departments: [
+                    { name: "المعهد العالي للإعلام: تخصصات الصحافة والإعلام الرقمي", keyword: "journalism broadcasting" },
+                    { name: "المعهد العالي للإدارة والمالية: المحاسبة والإدارة", keyword: "accounting finance" },
+                    { name: "المعهد الطبي: التمريض والتحاليل والصيدلة", keyword: "medical laboratory nurse" },
+                    { name: "المعهد التقني والهندسي: الميكانيك والكهرباء والمدني", keyword: "mechanical engineering" }
+                ]
+            }
+        ];
+
+        let currentKeyword = "";
+        let currentPage = 1;
+        let isLoading = false;
+
+        // إنشاء القائمة الجانبية ديناميكياً
+        function buildSidebar() {
+            const sidebar = document.getElementById('sidebar-menu');
+            academicData.forEach(item => {
+                const title = document.createElement('div');
+                title.className = 'college-title';
+                title.innerText = item.college;
+                sidebar.appendChild(title);
+
+                item.departments.forEach(dept => {
+                    const deptBtn = document.createElement('div');
+                    deptBtn.className = 'department-item';
+                    deptBtn.innerText = dept.name;
+                    deptBtn.onclick = () => selectDepartment(dept.name, dept.keyword, deptBtn);
+                    sidebar.appendChild(deptBtn);
+                });
+            });
+        }
+
+        // تحديد القسم وتجهيز جلب الصور
+        function selectDepartment(name, keyword, element) {
+            document.querySelectorAll('.department-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            document.getElementById('selected-title').innerText = name;
+            document.getElementById('selected-desc').innerText = `معرض الصور الحي واللا نهائي التابع لـ ${name}.`;
+
+            document.getElementById('gallery').innerHTML = '';
+            currentKeyword = keyword;
+            currentPage = 1;
+            fetchImages();
+        }
+
+        // جلب الصور ديناميكياً بناءً على الكلمة المفتاحية للقسم
+        async function fetchImages() {
+            if (isLoading || !currentKeyword) return;
+            isLoading = true;
+            document.getElementById('loader').style.display = 'block';
+
+            try {
+                // استخدام مصدر صور ديناميكي مجاني (Unsplash Source)
+                const gallery = document.getElementById('gallery');
+                
+                for (let i = 0; i < 12; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'img-card';
+                    
+                    // توليد رابط صور عشوائية مستهدفة بناءً على التخصص برقم معرففريد
+                    const imgUrl = `https://picsum.photos/seed/${currentKeyword}-${currentPage}-${i}/400/300`;
+                    
+                    card.innerHTML = `<img src="${imgUrl}" loading="lazy" alt="صورة ${currentKeyword}">`;
+                    gallery.appendChild(card);
+                }
+
+                currentPage++;
+            } catch (err) {
+                console.error("خطأ في جلب الصور", err);
+            } finally {
+                isLoading = false;
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        // التمرير اللانهائي (Infinite Scroll) عند الوصول لأسفل الصفحة
+        document.getElementById('main-scroll').addEventListener('scroll', function() {
+            if (this.scrollTop + this.clientHeight >= this.scrollHeight - 200) {
+                fetchImages();
+            }
+        });
+
+        // تهيئة الصفحة عند الفتح
+        buildSidebar();
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html id="htmlTag" lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">البوابة الأكاديمية والثقافية للطلاب</title>
+    <style>
+        :root {
+            --bg-color: #0b132b;
+            --card-bg: #1c2541;
+            --accent-color: #48cae4;
+            --secondary-color: #ffb703;
+            --text-color: #ffffff;
+            --text-muted: #cbd5e1;
+            --border-color: #2a3d66;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title h1 { color: var(--secondary-color); margin: 0; font-size: 1.8rem; }
+        .header-title p { color: var(--accent-color); margin: 5px 0 0 0; font-size: 0.95rem; }
+
+        .lang-switcher select {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            outline: none;
+        }
+
+        nav {
+            background-color: #111d42;
+            padding: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav a:hover { background-color: var(--accent-color); color: var(--bg-color); }
+
+        .container { max-width: 1250px; margin: 30px auto; padding: 0 20px; }
+        .section-title { color: var(--accent-color); font-size: 1.6rem; margin-top: 45px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 20px rgba(72, 202, 228, 0.25);
+        }
+
+        .card-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
+        .card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .card h3 { color: var(--secondary-color); margin-top: 0; font-size: 1.1rem; }
+        .card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
+        .btn-more { color: var(--accent-color); font-weight: bold; font-size: 0.85rem; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 3% auto;
+            padding: 25px;
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 750px;
+            max-height: 85vh;
+            overflow-y: auto;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .modal-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .close-btn { color: #aaa; position: absolute; top: 15px; left: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        [dir="ltr"] .close-btn { left: auto; right: 20px; }
+        .close-btn:hover { color: #fff; }
+        .modal-title { color: var(--secondary-color); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .modal-text { white-space: pre-line; line-height: 1.8; color: #e2e8f0; font-size: 0.95rem; }
+
+        footer { text-align: center; padding: 25px; margin-top: 50px; background-color: var(--card-bg); border-top: 1px solid var(--border-color); color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1 id="hTitle">☀️ البوابة الأكاديمية والثقافية الشاملة</h1>
+            <p id="hSub">دليل التاريخ، الجغرافيا، التراث والمؤسسات التعليمية والأكاديمية</p>
+        </div>
+        <div class="lang-switcher">
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية (AR)</option>
+                <option value="ku">Kurdî (KU)</option>
+                <option value="en">English (EN)</option>
+            </select>
+        </div>
+    </header>
+
+    <nav id="navMenu"></nav>
+
+    <div class="container" id="mainContainer"></div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modalImg" src="" class="modal-img" alt="الصورة">
+            <h2 id="modalTitle" class="modal-title"></h2>
+            <div id="modalBody" class="modal-text"></div>
+        </div>
+    </div>
+
+    <footer id="footerText">جميع الحقوق محفوظة © البوابة الأكاديمية</footer>
+
+    <script>
+        const db = {
+            ar: {
+                dir: "rtl",
+                title: "البوابة الأكاديمية والثقافية الشاملة",
+                hTitle: "☀️ البوابة الأكاديمية والثقافية",
+                hSub: "دليل شامل للتاريخ، الجغرافيا، التراث والمؤسسات الكيميائية والأكاديمية",
+                btnRead: "اقرأ التفاصيل الكاملة ➔",
+                footer: "جميع الحقوق محفوظة © البوابة الأكاديمية",
+                nav: [
+                    { id: "history", name: "التاريخ والحضارات" },
+                    { id: "geo", name: "الجغرافيا والأقاليم" },
+                    { id: "culture", name: "الثقافة والتراث" },
+                    { id: "eng", name: "الهندسة والبترول" },
+                    { id: "arts", name: "الآداب والإنسانيات" },
+                    { id: "social", name: "العلوم الاجتماعية وعلم المرأة" },
+                    { id: "science", name: "العلوم الطبيعية والتربية" },
+                    { id: "inst", name: "المعاهد العالية" }
+                ],
+                sections: [
+                    {
+                        id: "history",
+                        title: "📜 قسم التاريخ والحضارات",
+                        items: [
+                            {
+                                name: "الإمبراطورية الميدية (Medes)",
+                                img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
+                                short: "حضارة تاريخية قديمة في الهضبة الإيرانية ومحيط زاغروس.",
+                                details: `📌 الإمبراطورية الميدية (القرن 7 - 6 ق.م):\nتُعتبر الحضارة الميدية إحدى الركائز التاريخية الأبرز في منطقة زاغروس وهضبة إيران.\n• العاصمة: إكباتانا (همدان الحديثة).\n• أبرز الإنجازات: تأسيس تحالفات قوية وإسقاط الإمبراطورية الأشورية عام 612 ق.م بالتحالف مع البابليين.\n• الإرث الثقافي: يرتبط العيد القومي (نوروز) في التراث الشعبي بانتصار كاوة الحداد وقيام الدولة الميدية كرمز للحرية والتجدد.`
+                            },
+                            {
+                                name: "الكرد في القرن العشرين",
+                                img: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800",
+                                short: "المحطات السياسية والتاريخية الكبرى والمعاهدات الحديثة.",
+                                details: `📌 الكرد في القرن العشرين:\nشهد هذا القرن تحولات جيو-سياسية جذرية في المنطقة:\n• معاهدة سيفر (1920): اعترفت بحق تقرير المصير لعدة شعوب.\n• معاهدة لوزان (1923): أعادت رسم حدود الشرق الأوسط وتوزيع المناطق بين عدة دول حديثة.\n• الثورات والحركات الوطنية: ظهور ثورات متعددة مثل ثورة الشيخ سعيد وشرف خان وجمهورية مهاباد (1946) التي أسسها القاضي محمد.`
+                            },
+                            {
+                                name: "التاريخ المعاصر وروج آفا",
+                                img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800",
+                                short: "الإدارة الذاتية والتطورات الأكاديمية والاجتماعية الحديثة.",
+                                details: `📌 التاريخ المعاصر والإدارة الذاتية:\n• التجربة الحديثة: تأسيس الإدارة الذاتية لشمال وشرق سوريا في العقد الأخير.\n• الركائز الأساسية: الاعتماد على نموذج أخوة الشعوب، التعددية اللغوية، والمساواة بين الجنسين.\n• الإنجازات الأكاديمية: افتتاح مؤسسات تعليمية وجامعات حديثة مثل جامعة روج آفا، وتطوير المناهج باللغات الأم.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "geo",
+                        title: "🗺️ قسم الجغرافيا والأقاليم",
+                        items: [
+                            {
+                                name: "غرب كردستان - روج آفا",
+                                img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+                                short: "السهول الخصبة، الجزيرة والفرات، والموارد الطبيعية.",
+                                details: `📌 جغرافية روج آفا (شمال وشرق سوريا):\n• المناطق الإدارية: تضم الجزيرة، كوباني، وعفرين، إضافة لسهول الرقة والدير.\n• الموارد الطبيعية: تُعد السلة الغذائية الرئيسية للحبوب (القمح والشعير)، وتحتوي على أكبر حقول النفط والغاز (مثل رميلان).\n• الأنهار: يمر بها نهر الفرات والخابور، وتتميز بتربتها الزراعية الخصبة.`
+                            },
+                            {
+                                name: "جبال زاغروس وتوروس",
+                                img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
+                                short: "السلاسل الجبلية الاستراتيجية والمناخ والتنوع البيئي.",
+                                details: `📌 سلاسل جبال زاغروس وتوروس:\n• جبال زاغروس: تمتد عبر غرب إيران والعراق، وتتميز بقممها العالية وتنوعها البيولوجي ومصادر المياه الشاسعة.\n• جبال توروس: تشكل الحدود الطبيعية الجبلية الشمالية.\n• الأهمية البيئية: تُعتبر الموطن الأصلي لبدايات الزراعة واستئناس الحيوانات في العصر الحجري الحديث (الهلال الخصيب).`
+                            }
+                        ]
+                    },
+                    {
+                        id: "culture",
+                        title: "🎭 قسم الثقافة والتراث",
+                        items: [
+                            {
+                                name: "الأدب والملاحم الكلاسيكية",
+                                img: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800",
+                                short: "ملحمة ممو زين والشاعر أحمد خاني والتراث الشفهي.",
+                                details: `📌 الأدب والكلاسيكيات:\n• ممو زين (Mem û Zîn): الشاهكار الأدبي الخالد للشاعر والفيلسوف أحمد خاني (أحمدي خاني) في القرن 17.\n• التراث الشفهي (Dengbêj): شعراء ومغنون حفظوا التاريخ والقصص والملاحم الشعبية عبر أجيال متتالية دون تدوين، مثل ملحمة درويشي عفدي.`
+                            },
+                            {
+                                name: "اللغة واللهجات الكردية",
+                                img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
+                                short: "الكرمانجية، الصورانية، الزازاكية، والأبجديات المستخدمة.",
+                                details: `📌 اللغة واللهجات:\n• العائلة اللغوية: تنتمي إلى اللغات الهندوأوروبية (الفرع الإيراني).\n• أبرز اللهجات: الكرمانجية الشمالية (Kurmanjî)، الصورانية (Soranî)، والزازاكية (Zazakî/Kirmanckî).\n• الأبجديات: تُكتب بالأبجدية اللاتينية (أبجدية جلادت بدرخان) وبالأبجدية المعتمدة على الحروف العربية.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "eng",
+                        title: "⚙️ كلية الهندسة والبترول",
+                        items: [
+                            {
+                                name: "قسم هندسة البترول والبتروكيمياء (رميلان)",
+                                img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800",
+                                short: "إعداد مهندسين لقيادة حقول النفط ومحطات التكرير.",
+                                details: `📌 هندسة البترول (رميلان):\n• المقررات: جيولوجيا النفط، هندسة الحفر، استخراج وتكرير النفط، والسلامة الصناعية.\n• أهداف القسم: ربط الجانب النظري بالتطبيق الميداني المباشر في حقول رميلان.`
+                            },
+                            {
+                                name: "قسم الهندسة الزراعية والبيئية",
+                                img: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800",
+                                short: "استصلاح الأراضي، تقنيات الري، وتطوير الإنتاج.",
+                                details: `📌 الهندسة الزراعية والبيئة:\n• المقررات: علوم التربة، وقاية النبات، الاستزراع المستدام، والتقانات البيئية.\n• أهداف القسم: تحقيق الأمن الغذائي المحلي وحماية الموارد المائية.`
+                            },
+                            {
+                                name: "قسم الهندسة الحاسوبية",
+                                img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800",
+                                short: "تطوير البرمجيات، الشبكات، والذكاء الاصطناعي.",
+                                details: `📌 الهندسة الحاسوبية:\n• المقررات: البرمجة المتطورة، قواعد البيانات، الأمن السيبراني، وهيكلية الحاسوب.\n• أهداف القسم: بناء بنية تحتية برمجية وإعداد مهندسين للتحول الرقمي.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "arts",
+                        title: "📚 كلية الآداب والعلوم الإنسانية",
+                        items: [
+                            {
+                                name: "قسم اللغة والأدب الكردي",
+                                img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800",
+                                short: "تعميق القواعد النحوية، النقد الأدبي، وتاريخ الأدب.",
+                                details: `📌 الأدب الكردي:\n• المواد: قواعد اللغة، النقد الأدبي، الأدب الكلاسيكي والمعاصر، وتحليل النصوص.`
+                            },
+                            {
+                                name: "قسم اللغة والأدب العربي والإنكليزي والترجمة",
+                                img: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800",
+                                short: "الدراسات اللغوية المتقاربة، الترجمة الفورية، والأدب العالمي.",
+                                details: `📌 قسم اللغات والترجمة:\n• المواد: اللسانيات التطبيقية، استراتيجيات الترجمة الفورية والتحريرية، والأدب المقارن.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "social",
+                        title: "⚖️ كلية العلوم الاجتماعية وعلم المرأة",
+                        items: [
+                            {
+                                name: "قسم علم المرأة (Jineolojî)",
+                                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800",
+                                short: "إعادة قراءة العلوم الاجتماعية وتاريخ علم المرأة.",
+                                details: `📌 قسم علم المرأة (Jineolojî):\n• المقررات: مدخل إلى علم المرأة، تاريخ العلوم الاجتماعية، علم النفس الاجتماعي، ودور المرأة في الحضارات.`
+                            },
+                            {
+                                name: "قسم علم الاجتماع (Civaknasi) والتاريخ والسياسة",
+                                img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800",
+                                short: "تحليل الظواهر الاجتماعية، العلاقات الدولية، والتاريخ.",
+                                details: `📌 العلوم الاجتماعية والسياسية:\n• المقررات: النظرية الاجتماعية، النظم السياسية والدولية، المناهج البحثية والتاريخية.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "science",
+                        title: "🔬 كلية العلوم الطبيعية والتربية",
+                        items: [
+                            {
+                                name: "أقسام الكيمياء، الفيزياء، الأحياء، والرياضيات",
+                                img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800",
+                                short: "البحوث العلمية الأساسية والمختبرات التطبيقية.",
+                                details: `📌 كلية العلوم الطبيعية:\n• التخصصات: الكيمياء العضوية والتحليلية، الفيزياء الحديثة، علم الأحياء الدقيقة، والرياضيات التطبيقية.`
+                            },
+                            {
+                                name: "أقسام التربية، معلم صف، والتربية البدنية",
+                                img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800",
+                                short: "إعداد الكوادر التدريسية وعلوم علم النفس التربوي.",
+                                details: `📌 كلية التربية:\n• المقررات: طرق التدريس الحديثة، علم نفس النمو، والإدارة الصفية.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "inst",
+                        title: "🏛️ المعاهد العالية والمهنية",
+                        items: [
+                            {
+                                name: "المعهد العالي للإعلام والإدارة والمالية",
+                                img: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800",
+                                short: "الصحافة الرقمية، المحاسبة، والإدارة المالية.",
+                                details: `📌 المعهد العالي للإعلام والإدارة:\n• التخصصات: التحرير الصحفي، الإعداد التلفزيوني، المحاسبة المصرفية، وإدارة الأعمال.`
+                            },
+                            {
+                                name: "المعهد الطبي والمعهد التقني الهندسي",
+                                img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800",
+                                short: "التمريض، التحاليل الطبية، الميكانيك، والكهرباء.",
+                                details: `📌 المعاهد الطبية والتقنية:\n• التخصصات: التمريض السريري، المختبرات، الصيدلة، الهندسة المدنية المصغرة، والكهرباء والميكانيك.`
+                            }
+                        ]
+                    }
+                ]
+            },
+            ku: {
+                dir: "ltr",
+                title: "Otomatiya Portalê Academic & Kurdî",
+                hTitle: "☀️ Portala Academîk û Çandî",
+                hSub: "Rêberê Dîrok, Erdnîgarî, Kelepûr û Saziyên Perwerdehiyê",
+                btnRead: "Hûragahiyan bixwîne ➔",
+                footer: "Hemû maf parastî ne © Portala Academîk",
+                nav: [
+                    { id: "history", name: "Dîrok û Şaristanî" },
+                    { id: "geo", name: "Erdnîgarî û Herêm" },
+                    { id: "culture", name: "Çand û Kelepûr" },
+                    { id: "eng", name: "Endandiyarî & Petrol" },
+                    { id: "arts", name: "Ziman û Wêje" },
+                    { id: "social", name: "Zanistên Civakî & Jineolojî" },
+                    { id: "science", name: "Zanistên Sûsî û Perwerde" },
+                    { id: "inst", name: "Peymangehên Bilind" }
+                ],
+                sections: [
+                    {
+                        id: "history",
+                        title: "📜 Beşa Dîrok û Şaristaniyê",
+                        items: [
+                            {
+                                name: "Împeratoriya Med (Medes)",
+                                img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
+                                short: "Şaristaniyek kevnar li platoya Îranê û Zagrosê.",
+                                details: `📌 Împeratoriya Med (M.P. 700 - 550):\n• Paytext: Ekbatana (Hemedana îro).\n• Serkeftin: Di sala 612 berî zayînê de împeratoriya Asûrî anîn xwarê.\n• Kelepûr: Cejna Newrozê di çanda gelêrî de bi serkeftina Kawa û avakirina dewleta Med re tê girêdan.`
+                            },
+                            {
+                                name: "Kurd di Seda 20'an de",
+                                img: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800",
+                                short: "Peymanên siyasî û guherînên mezin ên dîrokî.",
+                                details: `📌 Kurd di Seda 20'an de:\n• Peymana Sèvres (1920) û Peymana Lausanne (1923).\n• Avakirina Komara Kurdistanê li Mehabadê (1946) ji aliyê Qazî Mihemed ve.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "geo",
+                        title: "🗺️ Beşa Erdnîgarî û Herêman",
+                        items: [
+                            {
+                                name: "Rojavayê Kurdistanê (Rojava)",
+                                img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+                                short: "Zeviyên beraq, Cizîr û Firat, û çavkaniyên xwezayî.",
+                                details: `📌 Erdnîgarî û Mîrasa Rojava:\n• Herêmên sereke: Cizîr, Kobanê, û Efrîn.\n• Çavkaniyên sereke: Genim, ceh û çavkaniyên petrolê li Rûmêlan.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "culture",
+                        title: "🎭 Beşa Çand û Kelepûrê",
+                        items: [
+                            {
+                                name: "Wêje û Epîkên Klasîk",
+                                img: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800",
+                                short: "Mem û Zîn, Ehmedê Xanî, û Çanda Dengbêjiyê.",
+                                details: `📌 Wêje û Şahberhem:\n• Mem û Zîn a Ehmedê Xanî (Sedsala 17).\n• Masî û Dastanên Dengbêjiyê ku dîroka devkî parastine.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "eng",
+                        title: "⚙️ Fakulteya Endandiyarî û Petrolê",
+                        items: [
+                            {
+                                name: "Beşa Endandiyariya Petrolê (Rûmêlan)",
+                                img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800",
+                                short: "Perwerdehiya derxistin û parzûnkirina petrolê.",
+                                details: `📌 Endandiyariya Petrolê li Rûmêlan:\nEndandiyarên dahatûyê ji bo kargeh û bîrên petrolê tên amadekirin.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "arts",
+                        title: "📚 Fakulteya Ziman û Zaniyarî",
+                        items: [
+                            {
+                                name: "Beşa Ziman û Wêjeya Kurdî",
+                                img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800",
+                                short: "Rêزمان, Rexneya Wêjeyî û Dîroka Ziman.",
+                                details: `📌 Ziman û Wêjeya Kurdî:\nLêkolînên kûr li ser zaravayên Kurmancî û şêweyên wêjeyî.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "social",
+                        title: "⚖️ Fakulteya Civaknasî & Jineolojî",
+                        items: [
+                            {
+                                name: "Beşa Jineolojî û Civaknasiyê",
+                                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800",
+                                short: "Zanista jinê, dîroka civakê û lêkolînên mirovî.",
+                                details: `📌 Beşa Jineolojî:\nNûvekirina zanistên civakî ji perspektîfa mezinbûn û azadiya jinê.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "science",
+                        title: "🔬 Fakulteya Zanist û Perwerdeyê",
+                        items: [
+                            {
+                                name: "Zanistên Sûsî û Perwerdeya Mamosteyan",
+                                img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800",
+                                short: "Kîmya, Fîzîk, Bîyolojî û Perwerdeya Zîrek.",
+                                details: `📌 Beşa Zanistê:\nTêgihîştina nûjen a dersên zanistî û perwerdeya çalak.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "inst",
+                        title: "🏛️ Peymangehên Bilind",
+                        items: [
+                            {
+                                name: "Peymangeha Ragihandin û Bijîşkî",
+                                img: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800",
+                                short: "Rojنامevanî, Hemşîretî û Karên Teknîkî.",
+                                details: `📌 Peymangeh:\nAmadekirina kadroyên pispor ji bo nexweşxane û saziyên medyayî.`
+                            }
+                        ]
+                    }
+                ]
+            },
+            en: {
+                dir: "ltr",
+                title: "Academic & Cultural Kurdish Student Portal",
+                hTitle: "☀️ Academic & Cultural Student Portal",
+                hSub: "Comprehensive guide to History, Geography, Heritage, & Academic Programs",
+                btnRead: "Read Full Details ➔",
+                footer: "All Rights Reserved © Academic Portal",
+                nav: [
+                    { id: "history", name: "History & Civilization" },
+                    { id: "geo", name: "Geography & Regions" },
+                    { id: "culture", name: "Culture & Heritage" },
+                    { id: "eng", name: "Engineering & Petroleum" },
+                    { id: "arts", name: "Arts & Humanities" },
+                    { id: "social", name: "Social Sciences & Jineolojî" },
+                    { id: "science", name: "Natural Sciences & Edu" },
+                    { id: "inst", name: "Higher Institutes" }
+                ],
+                sections: [
+                    {
+                        id: "history",
+                        title: "📜 History & Civilization Section",
+                        items: [
+                            {
+                                name: "The Median Empire (Medes)",
+                                img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
+                                short: "Ancient civilization in Zagros and the Iranian plateau.",
+                                details: `📌 Median Empire (7th-6th Century BC):\n• Capital: Ecbatana (modern Hamadan).\n• Key Milestone: Fall of Nineveh in 612 BC in alliance with the Babylonians.\n• Cultural Legacy: Newroz is historically linked to the victory of Kawa and the rise of the Medes as a symbol of freedom.`
+                            },
+                            {
+                                name: "Kurds in the 20th Century",
+                                img: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800",
+                                short: "Major geopolitical shifts, treaties, and national movements.",
+                                details: `📌 20th Century Milestones:\n• Treaty of Sèvres (1920) & Treaty of Lausanne (1923).\n• Establishment of the Republic of Mahabad in 1946 by Qazi Muhammad.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "geo",
+                        title: "🗺️ Geography & Regions",
+                        items: [
+                            {
+                                name: "Rojava (Northern & Eastern Syria)",
+                                img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+                                short: "Fertile plains, Euphrates river, and rich resources.",
+                                details: `📌 Geography of Rojava:\n• Key Regions: Jazira, Kobanê, and Afrin.\n• Resources: Agriculture (Wheat) and Energy fields in Rümeylan.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "culture",
+                        title: "🎭 Culture & Heritage",
+                        items: [
+                            {
+                                name: "Classical Literature & Epics",
+                                img: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800",
+                                short: "Mem û Zîn, Ahmad Khani, and the Dengbêj tradition.",
+                                details: `📌 Literature:\n• Mem û Zîn by Ahmad Khani (17th Century).\n• Dengbêj Tradition: Oral poets and singers preserving history across centuries.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "eng",
+                        title: "⚙️ Engineering & Petroleum Faculty",
+                        items: [
+                            {
+                                name: "Petroleum & Petrochemicals (Rümeylan)",
+                                img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800",
+                                short: "Petroleum extraction, refining, and industrial safety.",
+                                details: `📌 Petroleum Engineering:\nPrepares specialized engineers to manage oilfields and refinery stations.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "arts",
+                        title: "📚 Arts & Humanities Faculty",
+                        items: [
+                            {
+                                name: "Kurdish Language & Literature",
+                                img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800",
+                                short: "Grammar, literary criticism, and historical text analysis.",
+                                details: `📌 Kurdish Literature:\nFocuses on linguistics, Kurmanjî studies, and classical/modern poetry.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "social",
+                        title: "⚖️ Social Sciences & Jineolojî",
+                        items: [
+                            {
+                                name: "Jineolojî & Sociology Departments",
+                                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800",
+                                short: "Women's science, social history, and human development.",
+                                details: `📌 Jineolojî Department:\nReinterpreting social sciences and history through women's social contribution.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "science",
+                        title: "🔬 Natural Sciences & Education",
+                        items: [
+                            {
+                                name: "Sciences & Teacher Training",
+                                img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800",
+                                short: "Chemistry, Physics, Biology, and Modern Pedagogy.",
+                                details: `📌 Science & Education:\nDeveloping scientific research and modern teaching methodologies.`
+                            }
+                        ]
+                    },
+                    {
+                        id: "inst",
+                        title: "🏛️ Higher Professional Institutes",
+                        items: [
+                            {
+                                name: "Media, Medical & Technical Institutes",
+                                img: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800",
+                                short: "Journalism, Nursing, and Engineering Technologies.",
+                                details: `📌 Professional Institutes:\nPractical qualifications for healthcare, media platforms, and technical fields.`
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentLang = "ar";
+
+        function renderApp() {
+            const data = db[currentLang];
+            document.getElementById("htmlTag").dir = data.dir;
+            document.getElementById("htmlTag").lang = currentLang;
+            document.getElementById("pageTitle").innerText = data.title;
+            document.getElementById("hTitle").innerText = data.hTitle;
+            document.getElementById("hSub").innerText = data.hSub;
+            document.getElementById("footerText").innerText = data.footer;
+
+            // Render Nav
+            const navMenu = document.getElementById("navMenu");
+            navMenu.innerHTML = "";
+            data.nav.forEach(item => {
+                let a = document.createElement("a");
+                a.href = "#" + item.id;
+                a.innerText = item.name;
+                navMenu.appendChild(a);
+            });
+
+            // Render Main Container
+            const container = document.getElementById("mainContainer");
+            container.innerHTML = "";
+
+            data.sections.forEach(sec => {
+                let secHeader = document.createElement("h2");
+                secHeader.className = "section-title";
+                secHeader.id = sec.id;
+                secHeader.innerText = sec.title;
+                container.appendChild(secHeader);
+
+                let grid = document.createElement("div");
+                grid.className = "grid";
+
+                sec.items.forEach(item => {
+                    let card = document.createElement("div");
+                    card.className = "card";
+                    card.onclick = () => openModal(item);
+                    card.innerHTML = `
+                        <img src="${item.img}" class="card-img" alt="${item.name}">
+                        <div class="card-body">
+                            <h3>${item.name}</h3>
+                            <p>${item.short}</p>
+                            <span class="btn-more">${data.btnRead}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(grid);
+            });
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            renderApp();
+        }
+
+        function openModal(item) {
+            document.getElementById("modalTitle").innerText = item.name;
+            document.getElementById("modalImg").src = item.img;
+            document.getElementById("modalBody").innerText = item.details;
+            document.getElementById("infoModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("infoModal").style.display = "none";
+        }
+
+        window.onclick = function(e) {
+            if (e.target == document.getElementById("infoModal")) closeModal();
+        }
+
+        document.addEventListener("DOMContentLoaded", renderApp);
+    </script>
+</body>
 </html>
